@@ -14,6 +14,7 @@ body{background:radial-gradient(900px 500px at 8% -10%,rgba(99,102,241,.28),tran
 .btn{display:inline-flex;align-items:center;justify-content:center;gap:.5rem;white-space:nowrap;border-radius:.75rem;padding:.65rem 1.1rem;font-weight:600;transition:.15s;border:1px solid rgba(255,255,255,.12);background:rgba(255,255,255,.06);color:#f1f5f9;cursor:pointer}
 .btn:hover:not(:disabled){background:rgba(255,255,255,.12)}
 .btn:disabled{opacity:.4;cursor:not-allowed}
+.btn:focus-within{outline:2px solid #818cf8;outline-offset:2px}
 .btn-p{background:#6366f1;border-color:#818cf8;box-shadow:0 0 20px rgba(99,102,241,.5)}
 .btn-p:hover:not(:disabled){background:#4f46e5}
 .opt{display:flex;align-items:flex-start;gap:.75rem;width:100%;text-align:left;padding:.8rem 1rem;border-radius:.85rem;border:1px solid rgba(255,255,255,.1);background:rgba(15,23,42,.5);transition:.15s;color:inherit;cursor:pointer}
@@ -480,8 +481,33 @@ static void Main() {
 ];
 
 const TOPICS=['All Topics','Syntax, input-output, variables types','Type conversion (casting), boxing - unboxing, if else','switch case, logical operators, loops, nested loops','Arrays, Multi dimensional arrays, Jagged Arrays','Strings-String builder, Methods, Recursion, access modifier'];
-const mk=s=>r=>({t:r[0],q:r[1],c:r[2],o:r[3],a:r[4],e:r[5],s});
-const Q=RAW.map(mk(0));
+const mk=r=>({t:r[0],q:r[1],c:r[2]||'',o:r[3],a:r[4],e:r[5]||''});
+const BUILTIN=RAW.map(mk);
+const KEY='csq-questions';
+const WS=s=>String(s).replace(/\s+/g,' ').trim();
+const NORM=s=>WS(s).toLowerCase();
+/* validate + normalise one question from the editor or a JSON file (accepts the exported format and the internal one) */
+function norm(it){
+  if(!it||typeof it!=='object'||Array.isArray(it))return{err:'not an object'};
+  const q=String(it.question??it.q??'').trim();if(!q)return{err:'missing "question"'};
+  const raw=it.options??it.o;if(!Array.isArray(raw))return{err:'"options" must be a list'};
+  const o=raw.map(x=>x==null?'':String(x).trim());
+  if(o.length<2||o.length>4||o.some(x=>!x))return{err:'needs 2–4 non-empty options'};
+  if(new Set(o.map(WS)).size!==o.length)return{err:'options must all be different'};
+  let a=-1;
+  if(Number.isInteger(it.answer_index))a=it.answer_index;
+  else if(typeof it.answer==='string'){const s=it.answer.trim();a=/^[A-Da-d]$/.test(s)?'ABCD'.indexOf(s.toUpperCase()):o.findIndex(x=>WS(x)===WS(s));if(a<0&&!/^[A-Da-d]$/.test(s))a=o.findIndex(x=>NORM(x)===NORM(s))}
+  else if(Number.isInteger(it.a))a=it.a;
+  if(!(a>=0&&a<o.length))return{err:'missing or invalid correct answer ("answer": "A"–"D", or "answer_index")'};
+  let t=it.lecture??it.t;
+  if(typeof t==='string'&&/^\d+$/.test(t.trim()))t=+t;
+  if(!Number.isInteger(t)){const s=NORM(it.topic??'');const k=TOPICS.findIndex((x,i)=>i&&NORM(x)===s);t=k>0?k:-1}
+  if(!(t>=1&&t<=5))return{err:'missing or invalid "lecture" (1–5)'};
+  const c=it.code??it.c,e=it.explanation??it.e;
+  return{q:{t,q,c:c==null?'':String(c).replace(/^\n+/,'').replace(/\s+$/,''),o,a,e:e==null?'':String(e).trim()}};
+}
+const Q=BUILTIN;
+try{localStorage.removeItem(KEY)}catch(e){}   /* drop edits saved by the old in-page editor */
 
 /* ---------- helpers ---------- */
 const $=s=>document.querySelector(s),app=$('#app'),L='ABCD';
@@ -497,38 +523,71 @@ const pool=k=>Q.filter(q=>!k||q.t===k);
 const CH='rounded-full bg-white/10 px-3 py-1';
 
 /* ---------- state ---------- */
-const S={view:'intro',topic:0,shuffle:true,qs:[],i:0,ans:[],t0:0,el:0,tm:null};
+const S={view:'intro',topic:0,shuffle:true,qs:[],i:0,ans:[],t0:0,el:0,tm:null,prog:null};
 const score=()=>S.ans.reduce((s,a,k)=>s+(a===S.qs[k].a?1:0),0);
 const answered=()=>S.ans.filter(a=>a!==null).length;
+
+/* ---------- save progress (this browser only) ---------- */
+const PK='csq-progress',FK='csq-prefs';
+function saveProg(){
+  if(S.view!=='quiz')return;
+  const r={v:1,topic:S.topic,shuffle:S.shuffle,i:S.i,ans:S.ans,el:(Date.now()-S.t0)/1000|0,qs:S.qs};
+  S.prog=r;try{localStorage.setItem(PK,JSON.stringify(r))}catch(e){}
+}
+function clearProg(){S.prog=null;try{localStorage.removeItem(PK)}catch(e){}}
+function loadProg(){
+  try{
+    const r=JSON.parse(localStorage.getItem(PK));
+    if(!r||r.v!==1||!Array.isArray(r.qs)||!r.qs.length||r.qs.length>5000||!Array.isArray(r.ans)||r.ans.length!==r.qs.length)return null;
+    if(r.qs.some(x=>!x||typeof x.q!=='string'||!Array.isArray(x.o)||x.o.some(s=>typeof s!=='string')||!(x.t>=1&&x.t<=5)))return null;
+    if(r.qs.map(norm).some(x=>!x.q))return null;
+    const qs=r.qs.map(x=>({t:x.t|0,q:x.q,c:typeof x.c==='string'?x.c:'',o:[...x.o],a:x.a,e:typeof x.e==='string'?x.e:''}));
+    if(!r.ans.every((a,k)=>a===null||(Number.isInteger(a)&&a>=0&&a<qs[k].o.length)))return null;
+    if(!(Number.isInteger(r.i)&&r.i>=0&&r.i<qs.length)||!(r.topic>=0&&r.topic<=5)||!(r.el>=0))return null;
+    return{v:1,topic:r.topic|0,shuffle:!!r.shuffle,i:r.i,ans:r.ans,el:r.el|0,qs};
+  }catch(e){return null}
+}
+function savePrefs(){try{localStorage.setItem(FK,JSON.stringify({topic:S.topic,shuffle:S.shuffle}))}catch(e){}}
+function loadPrefs(){try{const r=JSON.parse(localStorage.getItem(FK));if(r){if(Number.isInteger(r.topic)&&r.topic>=0&&r.topic<=5)S.topic=r.topic;if(typeof r.shuffle==='boolean')S.shuffle=r.shuffle}}catch(e){}}
+function startTimer(){
+  clearInterval(S.tm);
+  S.tm=setInterval(()=>{const s=(Date.now()-S.t0)/1000|0,e=$('#tm');if(e)e.textContent=fmt(s);if(s%15===0)saveProg()},1000);
+}
+function resume(){
+  const r=S.prog;if(!r)return;
+  S.topic=r.topic;S.shuffle=r.shuffle;S.qs=r.qs;S.ans=r.ans;S.i=r.i;S.view='quiz';S.t0=Date.now()-r.el*1000;
+  startTimer();render();scrollTo({top:0,behavior:'smooth'});
+}
+S.prog=loadProg();loadPrefs();
 
 function begin(list){
   S.qs=list.map(q=>{const ord=shuf(q.o.map((_,k)=>k)).slice();const o=S.shuffle?ord:q.o.map((_,k)=>k);return{...q,o:o.map(k=>q.o[k]),a:o.indexOf(q.a)}});
   S.i=0;S.ans=Array(S.qs.length).fill(null);S.view='quiz';S.t0=Date.now();
-  clearInterval(S.tm);S.tm=setInterval(()=>{const e=$('#tm');if(e)e.textContent=fmt((Date.now()-S.t0)/1000|0)},1000);
+  startTimer();saveProg();
   render();
 }
 function startNew(){
-  let l=pool(S.topic);if(S.shuffle)l=shuf(l);
+  let l=pool(S.topic);if(!l.length)return;if(S.shuffle)l=shuf(l);
   begin(l);
 }
 function finish(){
   const u=S.ans.length-answered();
   if(u&&!confirm(u+' question(s) unanswered. Finish anyway?'))return;
-  clearInterval(S.tm);S.el=(Date.now()-S.t0)/1000|0;S.view='result';
+  clearProg();clearInterval(S.tm);S.el=(Date.now()-S.t0)/1000|0;S.view='result';
   if(S.qs.length>=5)saveBest(S.topic,Math.round(score()/S.qs.length*100));
   render();scrollTo({top:0,behavior:'smooth'});
 }
 function setTopic(k){
   const inQuiz=S.view==='quiz';
   if(inQuiz&&answered()&&!confirm('Switch topic? Your current progress will be lost.'))return;
-  S.topic=k;clearInterval(S.tm);
+  S.topic=k;savePrefs();clearInterval(S.tm);
   if(inQuiz)startNew();else{S.view='intro';render()}
 }
 function pick(k){
   if(S.view!=='quiz'||k>=S.qs[S.i].o.length||S.ans[S.i]!==null)return;
-  S.ans[S.i]=k;render();const n=$('[data-act=next]');if(n)n.focus({preventScroll:true});
+  S.ans[S.i]=k;saveProg();render();const n=$('[data-act=next]');if(n)n.focus({preventScroll:true});
 }
-function go(d){S.i+=d;render();app.scrollIntoView({behavior:'smooth',block:'start'})}
+function go(d){S.i+=d;saveProg();render();app.scrollIntoView({behavior:'smooth',block:'start'})}
 
 /* ---------- views ---------- */
 function tabs(){
@@ -541,13 +600,18 @@ function tabs(){
 
 function intro(){
   const k=S.topic,p=pool(k).length,b=best()[k];
+  const r=S.prog,rd=r?r.ans.filter(a=>a!==null).length:0,rc=r?r.ans.filter((a,j)=>a===r.qs[j].a).length:0;
   return `<section class="glass rounded-2xl p-5 sm:p-8">
+    ${r?`<div class="mb-6 rounded-xl border border-indigo-400/40 bg-indigo-500/10 p-4"><p class="font-semibold text-indigo-200">▶ You have a quiz in progress</p>
+      <p class="mt-1 text-sm text-slate-300">${r.topic?'Lec '+r.topic:'All Topics'} · ${rd} of ${r.qs.length} answered · ${rc} correct · ⏱ ${fmt(r.el)}</p>
+      <div class="mt-3 flex flex-wrap gap-2"><button class="btn btn-p" data-act="resume">Resume quiz →</button><button class="btn" data-act="discard">Discard</button></div></div>`:''}
     <h2 class="text-xl font-bold sm:text-2xl">${k?`Lec ${k}: ${esc(TOPICS[k])}`:'All Topics'}</h2>
     <p class="mt-1 text-sm text-slate-400">${p} questions available${b!=null?` · Best score: <b class="text-indigo-300">${b}%</b>`:''}</p>
     <div class="mt-6">
       <label class="flex items-center gap-3 rounded-xl border border-white/10 bg-white/5 px-4 py-3 text-sm sm:inline-flex"><input type="checkbox" data-set="shuffle" ${S.shuffle?'checked':''} class="size-4 accent-[#6366f1]"> <span lang="ar" dir="rtl">خلط ترتيب الأسئلة والإجابات</span></label>
     </div>
-    <button class="btn btn-p mt-6 w-full sm:w-auto" data-act="start">Start quiz →</button>
+    <button class="btn btn-p mt-6 w-full sm:w-auto" data-act="start" ${p?'':'disabled'}>Start quiz →</button>
+    ${p?'':'<p class="mt-3 text-sm text-amber-300">No questions in this topic yet.</p>'}
     <ul class="mt-6 grid gap-2 text-sm text-slate-400 sm:grid-cols-3"><li>✓ Instant feedback + explanation</li><li>✓ Live score, progress bar &amp; timer</li><li>✓ Topic breakdown at the end</li></ul>
   </section>`;
 }
@@ -561,14 +625,14 @@ function quiz(){
       <span class="ml-auto flex items-center gap-2"><span class="${CH}">Score <b class="text-emerald-300">${score()}</b>/${ans}</span><span class="${CH}">⏱ <b id="tm">${fmt((Date.now()-S.t0)/1000|0)}</b></span></span>
     </div>
     <div class="mt-4 h-2 w-full overflow-hidden rounded-full bg-white/10" role="progressbar" aria-label="Progress" aria-valuemin="0" aria-valuemax="${n}" aria-valuenow="${ans}"><div class="h-full rounded-full bg-gradient-to-r from-[#6366f1] to-violet-400 transition-all duration-300" style="width:${ans/n*100}%"></div></div>
-    <h2 class="mt-5 text-lg font-semibold leading-snug sm:text-xl">${esc(q.q)}</h2>
+    <h2 dir="auto" class="mt-5 text-lg font-semibold leading-snug sm:text-xl">${esc(q.q)}</h2>
     ${code(q.c)}
     <div class="mt-5 grid gap-3">${q.o.map((o,k)=>{
       const c='opt'+(done?(k===q.a?' opt-ok':k===a?' opt-bad':' opt-dim'):'');
-      return `<button class="${c}" data-act="pick" data-v="${k}" ${done?'disabled':''}><span class="k">${L[k]}</span><span class="min-w-0 flex-1 whitespace-pre-line break-words">${esc(o)}</span><span aria-hidden="true">${done&&k===q.a?'✓':done&&k===a?'✗':''}</span></button>`}).join('')}</div>
+      return `<button class="${c}" data-act="pick" data-v="${k}" ${done?'disabled':''}><span class="k">${L[k]}</span><span dir="auto" class="min-w-0 flex-1 whitespace-pre-line break-words">${esc(o)}</span><span aria-hidden="true">${done&&k===q.a?'✓':done&&k===a?'✗':''}</span></button>`}).join('')}</div>
     ${done?`<div class="mt-5 rounded-xl border p-4 ${ok?'border-emerald-400/40 bg-emerald-500/10':'border-rose-400/40 bg-rose-500/10'}" role="status">
       <p class="font-semibold ${ok?'text-emerald-300':'text-rose-300'}">${ok?'✓ Correct!':'✗ Incorrect — the correct answer is '+L[q.a]}</p>
-      <p class="mt-1 text-sm leading-relaxed text-slate-200">${esc(q.e||('Correct answer: '+L[q.a]+'. '+q.o[q.a]))}</p></div>`:''}
+      <p dir="auto" class="mt-1 text-sm leading-relaxed text-slate-200">${esc(q.e||('Correct answer: '+L[q.a]+'. '+q.o[q.a]))}</p></div>`:''}
     <div class="mt-6 flex items-center justify-between gap-3">
       <button class="btn" data-act="prev" ${S.i?'':'disabled'}>← Previous</button>
       <button class="btn" data-act="finish">Finish</button>
@@ -603,10 +667,17 @@ function render(){
 /* ---------- events ---------- */
 document.addEventListener('click',e=>{
   const b=e.target.closest('[data-act]');if(!b||b.disabled)return;const v=+b.dataset.v;
-  ({tab:()=>setTopic(v),pick:()=>pick(v),prev:()=>go(-1),next:()=>S.i<S.qs.length-1?go(1):finish(),finish,start:startNew,
+  ({tab:()=>setTopic(v),pick:()=>pick(v),prev:()=>go(-1),next:()=>S.i<S.qs.length-1?go(1):finish(),finish,
+    start:()=>{if(S.prog&&S.prog.ans.some(a=>a!==null)&&!confirm('Starting a new quiz will replace your saved one. Continue?'))return;startNew()},
+    resume,discard:()=>{if(!confirm('Discard your saved quiz? This cannot be undone.'))return;clearProg();render()},
     again:()=>begin(S.qs),missed:()=>begin(S.qs.filter((q,k)=>S.ans[k]!==q.a)),home:()=>{S.view='intro';render();scrollTo({top:0,behavior:'smooth'})}})[b.dataset.act]();
 });
-document.addEventListener('change',e=>{const s=e.target.dataset.set;if(!s)return;S[s]=s==='shuffle'?e.target.checked:e.target.value;});
+document.addEventListener('change',e=>{
+  const s=e.target.dataset.set;if(!s)return;
+  if(s==='shuffle'){S.shuffle=e.target.checked;savePrefs()}
+});
+document.addEventListener('visibilitychange',()=>{if(document.hidden)saveProg()});
+addEventListener('pagehide',saveProg);
 document.addEventListener('keydown',e=>{
   if(S.view!=='quiz'||/SELECT|INPUT|TEXTAREA/.test(e.target.tagName)||e.ctrlKey||e.metaKey||e.altKey)return;
   const k=e.key.length===1?'1234abcd'.indexOf(e.key.toLowerCase()):-1;
