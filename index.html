@@ -1,0 +1,627 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="dark">
+<title>C# MCQ Quiz</title>
+<script src="https://cdn.tailwindcss.com/3.4.17"></script>
+<script>tailwind.config={theme:{extend:{colors:{accent:'#6366f1'}}}}</script>
+<style>
+body{background:radial-gradient(900px 500px at 8% -10%,rgba(99,102,241,.28),transparent 60%),radial-gradient(700px 500px at 100% 0,rgba(168,85,247,.16),transparent 60%),#0f172a;background-attachment:fixed;font-family:ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+.glass{background:rgba(30,41,59,.55);-webkit-backdrop-filter:blur(16px);backdrop-filter:blur(16px);border:1px solid rgba(255,255,255,.09);box-shadow:0 10px 40px rgba(0,0,0,.35)}
+.tab-on{border-color:#6366f1;box-shadow:0 0 0 1px #6366f1,0 0 22px rgba(99,102,241,.4);background:rgba(99,102,241,.2)}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:.5rem;white-space:nowrap;border-radius:.75rem;padding:.65rem 1.1rem;font-weight:600;transition:.15s;border:1px solid rgba(255,255,255,.12);background:rgba(255,255,255,.06);color:#f1f5f9;cursor:pointer}
+.btn:hover:not(:disabled){background:rgba(255,255,255,.12)}
+.btn:disabled{opacity:.4;cursor:not-allowed}
+.btn-p{background:#6366f1;border-color:#818cf8;box-shadow:0 0 20px rgba(99,102,241,.5)}
+.btn-p:hover:not(:disabled){background:#4f46e5}
+.opt{display:flex;align-items:flex-start;gap:.75rem;width:100%;text-align:left;padding:.8rem 1rem;border-radius:.85rem;border:1px solid rgba(255,255,255,.1);background:rgba(15,23,42,.5);transition:.15s;color:inherit;cursor:pointer}
+.opt:hover:not(:disabled){border-color:#6366f1;background:rgba(99,102,241,.14)}
+.opt:disabled{cursor:default}
+.opt-ok{border-color:#34d399!important;background:rgba(16,185,129,.16)!important}
+.opt-bad{border-color:#fb7185!important;background:rgba(244,63,94,.16)!important}
+.opt-dim{opacity:.55}
+.k{flex:none;width:1.6rem;height:1.6rem;border-radius:.5rem;display:grid;place-items:center;font-size:.75rem;font-weight:700;background:rgba(255,255,255,.1)}
+pre.code{background:#0b1220;border:1px solid rgba(255,255,255,.08);border-radius:.75rem;padding:.9rem 1rem;overflow-x:auto;font:13px/1.55 ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;color:#e2e8f0;max-width:100%}
+.t-k{color:#a5b4fc}.t-s{color:#6ee7b7}.t-c{color:#64748b;font-style:italic}.t-n{color:#fbbf24}
+:focus-visible{outline:2px solid #818cf8;outline-offset:2px}
+</style>
+</head>
+<body class="min-h-screen text-slate-100 antialiased">
+<div class="mx-auto max-w-6xl px-4 py-6 sm:py-10">
+  <header class="mb-6 flex flex-wrap items-end justify-between gap-3">
+    <div>
+      <h1 class="text-2xl font-bold tracking-tight sm:text-3xl"><span class="text-[#6366f1]">C#</span> MCQ Quiz</h1>
+      <p class="text-sm text-slate-400">Practice questions · Programming Language (CSE 141)</p>
+    </div>
+  </header>
+  <div class="mb-5 grid grid-cols-1 gap-2 sm:grid-cols-2 lg:grid-cols-4" aria-label="Resources">
+    <a class="btn text-sm" href="https://www.sanfoundry.com/1000-csharp-questions-answers/" target="_blank" rel="noopener noreferrer"><span aria-hidden="true">📚</span> Sanfoundry 1000 C# MCQs ↗</a>
+    <a class="btn text-sm" href="https://youtube.com/playlist?list=PLvhsOkzINhqhMZlFdUCA0HraU6ZMoO46j&amp;si=jz0TYrlRTdw7HnH1" target="_blank" rel="noopener noreferrer"><span aria-hidden="true">▶️</span> Lectures playlist (YouTube) ↗</a>
+    <a class="btn text-sm" href="https://drive.google.com/drive/folders/1iIMeX4yhpNLzv3mgZFPPEuJkBkgjpJ0V?usp=drive_link" target="_blank" rel="noopener noreferrer"><span aria-hidden="true">📁</span> Sections (Google Drive) ↗</a>
+    <a class="btn text-sm" href="https://drive.google.com/drive/folders/16HgLsUMHoYJ5y6k7EqOOpyv06er15Akc?usp=drive_link" target="_blank" rel="noopener noreferrer"><span aria-hidden="true">📝</span> <span lang="ar" dir="rtl">ملخصات</span> (Google Drive) ↗</a>
+  </div>
+  <nav id="tabs" aria-label="Topics"></nav>
+  <main id="app" class="mt-5"></main>
+  <div id="welcome" class="fixed inset-0 z-50 flex items-center justify-center p-4" style="background:rgba(2,6,23,.7);-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px)" role="dialog" aria-modal="true" aria-labelledby="welcome-msg">
+    <div class="glass w-full max-w-sm rounded-2xl p-6 text-center" style="background:rgba(30,41,59,.92)">
+      <p id="welcome-msg" lang="ar" dir="rtl" class="text-lg font-semibold leading-relaxed text-white">بنعتذر ان كان الموقع فيه اخطاء ❤️🌹 , حاولنا علي قد اما نقدر نتجنبها</p>
+      <button id="welcome-ok" type="button" class="btn btn-p mt-5 w-full"><span lang="ar" dir="rtl">تمام</span></button>
+    </div>
+  </div>
+
+</div>
+
+<script>
+/* [topic, question, code, options, answerIndex, explanation] */
+const RAW=[
+/* ---------- Lec 1 ---------- */
+[1,"Which of the following is the entry point of a C# console application?","",["static void Main(string[] args)","public void Start()","static void main()","void Run(string[] args)"],0,"Execution starts at the static Main method (capital M). C# is case-sensitive, so main() is not the entry point."],
+[1,"______ is the environment that controls the execution of managed code (MSIL).","",["CLI","MSIL","CLR","API"],2,"The Common Language Runtime (CLR) is the heart of .NET: it executes managed MSIL code and provides memory management (GC), security and exception handling."],
+[1,"A C# program is compiled into which form before the CLR runs it?","",["Native machine code for one specific CPU","Microsoft Intermediate Language (MSIL)","Java bytecode","Assembly source text"],1,"The compiler outputs MSIL, which is independent of the processor and operating system. The CLR then compiles it to machine code at run time."],
+[1,"Which component provides automatic memory management in .NET?","",["Garbage Collector","Compiler (csc)","Linker","Debugger"],0,"The Garbage Collector (GC) releases the memory of objects that are no longer in use."],
+[1,"Which command compiles helloworld.cs from the command prompt?","",["run helloworld.cs","csc helloworld.cs","compile helloworld","cs helloworld.exe"],1,"csc is the C# compiler. csc helloworld.cs generates helloworld.exe, which you then run by typing helloworld."],
+[1,"Which of the following is a valid variable name in C#?","",["2total","total-sum","my_var","class"],2,"Names may contain letters, digits and _, cannot start with a digit and cannot be a keyword. A hyphen is not allowed."],
+[1,"How many bytes does the long data type occupy in C#?","",["1","2","4","8"],3,"long is a 64-bit (8-byte) signed integer. int is 4 bytes, short is 2 and byte is 1."],
+[1,"What is the size of the char data type in C#?","",["8 bits","12 bits","16 bits","20 bits"],2,"char stores one 16-bit Unicode (UTF-16) character."],
+[1,"A variable of type ushort occupies ____ bytes.","",["2","4","8","16"],0,"ushort is an unsigned 16-bit integer (0 to 65,535), which is 2 bytes."],
+[1,"Which is the correct declaration and initialization of two int variables x and y?","",["int x = 32, y = 40.6;","int x = 42; y = 40;","int x = 32; int y = 40;","int x = y = 42;"],2,"40.6 is a double and cannot be stored in an int without a cast; in B the variable y is never declared; in D y is used before it is declared."],
+[1,"Which of the following is a reference type?","",["int","bool","char","string"],3,"string (like object and arrays) is a reference type. int, bool and char are value types derived from System.ValueType."],
+[1,"The type that is the parent of all other types in .NET is ____.","",["string","object","System.Int32","dynamic"],1,"object is the ultimate base type; a variable of type object can hold a value of any other type."],
+[1,"What is the output of the following code?",`class P {
+    static bool flag;
+    static void Main() {
+        Console.WriteLine(flag);
+    }
+}`,["True","False","null","Compile-time error"],1,"Fields receive default values: 0 for numbers, false for bool, null for references. So flag prints False."],
+[1,"What is the output of the following code?",`Console.WriteLine("Hello" + 5 + 5);`,["Hello10","Hello55","Hello 5 5","Compile-time error"],1,"Evaluation is left to right: 'Hello' + 5 gives 'Hello5', then + 5 gives 'Hello55'."],
+[1,"What is the output of the following code?",`Console.WriteLine(5 + 5 + "Hello");`,["10Hello","55Hello","Hello10","Compile-time error"],0,"5 + 5 is evaluated first (both are int) = 10, and the result is then concatenated with 'Hello'."],
+[1,"What is the output of the following code?",`int a = 3, b = 4;
+Console.WriteLine($"Sum = {a + b}");`,["Sum = {a + b}","Sum = 34","Sum = 7","Compile-time error"],2,"The $ prefix creates an interpolated string; the expression inside { } is evaluated: 3 + 4 = 7."],
+[1,"What is the output of the following code?",`string p = @"C:\\temp\\new";
+Console.WriteLine(p);`,["C:\\temp\\new","C:⇥emp ↵ ew (escape sequences applied)","C:\\\\temp\\\\new","Compile-time error"],0,"In a verbatim string (@ prefix) backslashes are literal, so \\t and \\n are not treated as escape sequences."],
+[1,"Which escape sequence represents a horizontal tab?","",["\\n","\\t","\\r","\\b"],1,"\\t inserts a tab. \\n is a new line, \\r a carriage return and \\b a backspace."],
+[1,"Which declaration correctly assigns the value 3.14 to a float variable f?","",["float f = 3.14;","float f = 3.14f;","float f = 3.14d;","float f = \"3.14\";"],1,"Real literals are double by default. The f suffix makes the literal a float; without it the compiler reports that double cannot be implicitly converted to float."],
+[1,"Which type is the best choice for exact decimal precision, such as money calculations?","",["float","double","decimal","long"],2,"decimal is a base-10 type with 28–29 significant digits, avoiding the binary rounding errors of float and double. Its literal suffix is m (e.g., 19.99m)."],
+[1,"Which declaration allows an int variable to hold the value null?","",["int x = null;","int? x = null;","Int x = Null;","int x = (null)0;"],1,"int? is Nullable<int>, a wrapper that allows value types to store null."],
+[1,"What does Console.ReadLine() return?","",["int","char","string","object"],2,"It returns the line typed by the user as a string, so numeric input must be parsed or converted."],
+[1,"What is the result of the following code?",`const double PI = 3.14;
+PI = 3.15;
+Console.WriteLine(PI);`,["3.14","3.15","Run-time exception","Compile-time error"],3,"A constant is fixed at compile time and cannot be assigned again, so this does not compile."],
+[1,"What is the output of the following code?",`Console.Write("A");
+Console.WriteLine("B");
+Console.Write("C");`,["ABC","AB on the first line, C on the second line","A, B and C each on its own line","A on the first line, BC on the second line"],1,"Write does not add a new line but WriteLine does. A and B share a line; C is printed on the next one."],
+
+/* ---------- Lec 2 ---------- */
+[2,"Which of the following shows the correct implicit (widening) conversion order?","",["float < int < char","char < int < float","int < char < float","float < char < int"],1,"Implicit conversions go from smaller/less precise types to larger ones: char → int → float. The reverse direction needs an explicit cast."],
+[2,"Given int x = 12; float y = 3.5f; int z; which is the correct way to assign x + y to z?","",["z = x + y;","z = x + int(float(y));","z = x + Convert.ToInt32(y);","z = int(x + y);"],2,"x + y is a float, which cannot be implicitly converted to int. Convert.ToInt32(y) returns an int (3.5 rounds to 4). B and D use C++-style casts, which are not valid in C#; the cast form is (int)(x + y)."],
+[2,"What is the result of the following code?",`double d = 9.78;
+int i = d;
+Console.WriteLine(i);`,["9","10","9.78","Compile-time error"],3,"double → int is a narrowing conversion and must be explicit: int i = (int)d;"],
+[2,"What is the output of the following code?",`double d = 9.78;
+int i = (int)d;
+Console.WriteLine(i);`,["9","10","9.78","Compile-time error"],0,"An explicit cast truncates the fractional part; it does not round."],
+[2,"Which exception does the following call throw?",`int n = int.Parse("12a");`,["FormatException","OverflowException","InvalidCastException","NullReferenceException"],0,"Parse throws FormatException for badly formed text, OverflowException when the value is out of range and ArgumentNullException for null."],
+[2,"What is the output of the following code?",`int n;
+bool ok = int.TryParse("abc", out n);
+Console.WriteLine(ok + " " + n);`,["True 0","False 0","False abc","FormatException is thrown"],1,"TryParse never throws. On failure it returns false and sets the out parameter to the default value 0."],
+[2,"What is the output of the following code?",`string s = null;
+Console.WriteLine(Convert.ToInt32(s));`,["null","0","ArgumentNullException","An empty line"],1,"The Convert methods return 0 for a null value (unlike int.Parse(null), which throws ArgumentNullException)."],
+[2,"What happens when the following code runs?",`int big = 300;
+byte b = Convert.ToByte(big);`,["b = 44","b = 255","OverflowException","FormatException"],2,"Convert checks the range. 300 does not fit in a byte (0–255), so OverflowException is thrown."],
+[2,"Converting a value type (such as int) to type object is called ____.","",["Unboxing","Boxing","Parsing","Widening"],1,"Boxing wraps a copy of a value type in an object on the heap; unboxing extracts the value type back from the object."],
+[2,"What is the output of the following code?",`int i = 12;
+object o = i;
+try {
+    int k = (byte)o;
+    Console.WriteLine("Boxing OK");
+}
+catch {
+    Console.WriteLine("Incorrect unboxing!");
+}`,["Boxing OK","Incorrect unboxing!","Compile-time error","Nothing is printed"],1,"o holds a boxed int. Unboxing must use exactly the original type; (byte)o throws InvalidCastException, which the catch block handles."],
+[2,"What is the output of the following code?",`int i = 5;
+object o = i;
+i = 10;
+Console.WriteLine(o);`,["5","10","15","Compile-time error"],0,"Boxing copies the value. Later changes to i do not affect the boxed copy."],
+[2,"What happens when the following code runs?",`object o = null;
+int x = (int)o;`,["x = 0","InvalidCastException","NullReferenceException","Compile-time error"],2,"Unboxing null into a non-nullable value type throws NullReferenceException. Unboxing to an incompatible type throws InvalidCastException."],
+[2,"When an int is boxed, where are the object reference and the boxed value stored?","",["Reference on the stack, value on the heap","Both on the stack","Reference on the heap, value on the stack","Both on the heap"],0,"Boxing creates the object on the heap; the variable that references it lives on the stack."],
+[2,"Which of the following is a unary operator?","",["?:","x + y + z","x + y","++x"],3,"Unary operators take one operand (++x, !x, -x). + is binary and ?: is ternary."],
+[2,"The associativity of the assignment operator = is ____.","",["right to left","left to right","up to down","down to up"],0,"Assignment is right-associative, so x = y = z = 10 assigns 10 to z first, then y, then x."],
+[2,"What is the output of the following code?",`Console.WriteLine(10 / 3 + " " + 10 % 3);`,["3.33 1","3 1","3 3","3.33 0.33"],1,"Both operands are int, so / is integer division (3) and % gives the remainder (1)."],
+[2,"What is the output of the following code?",`int x = 4, b = 2;
+x -= b /= x >> 2;
+Console.WriteLine(x + " " + b);`,["2 2","4 2","0 1","2 1"],0,"x >> 2 = 1; b /= 1 leaves b = 2; x -= 2 gives x = 2."],
+[2,"What is the output of the following code?",`int a = 7;
+string r = a % 2 == 0 ? "Even" : "Odd";
+Console.WriteLine(r);`,["Even","Odd","7","Compile-time error"],1,"?: returns the first value when the condition is true, otherwise the second. 7 % 2 = 1, so the result is Odd."],
+[2,"What happens when the following code is compiled?",`int x = 0;
+if (x) {
+    x--;
+}
+else x++;`,["x becomes 1","x becomes -1","Run-time exception","Compile-time error"],3,"An if condition must be a bool; an int is not implicitly converted (unlike C/C++). Use if (x != 0)."],
+[2,"If x = 1, y = 0 and z = 1 initially, what are x, y and z after this code?",`if (x > y && x > z) { y = x; z = x + 1; }
+else if (x + y >= z) { x++; z = x + 1; }
+else y = z + x;`,["x=1, y=1, z=2","x=2, y=0, z=3","x=1, y=2, z=1","x=2, y=1, z=3"],1,"First condition: 1 > 0 && 1 > 1 is false. Second: 1 + 0 >= 1 is true, so x = 2 and z = 3; y is unchanged."],
+[2,"If x = 2, y = 3 and z = 5 initially, what are the values after this code?",`if (x + 1 == y) y = y + 1;
+else x++;`,["x=3, y=3, z=5","x=2, y=4, z=5","x=3, y=4, z=5","x=2, y=3, z=5"],1,"x + 1 equals 3, which is y, so the if branch runs and y becomes 4."],
+[2,"What is the output of the following code?",`int x = 2; int y = 4;
+long z = 8;
+z /= x ^ y * --x - (-(y++ * 2));
+Console.WriteLine($"x={x} , y={y} , z={z}");`,["x=1 , y=5 , z=0","x=2 , y=4 , z=0","x=1 , y=5 , z=8","x=1 , y=4 , z=1"],0,"Operands are evaluated left to right: x ^ (y * --x - (-(y++ * 2))) = 2 ^ (4*1 + 8) = 2 ^ 12 = 14. So z = 8 / 14 = 0 (integer division), x becomes 1 and y becomes 5."],
+
+/* ---------- Lec 3 ---------- */
+[3,"Which statement about the C# switch statement is true?","",["Every case section must end with break (or another jump statement); fall-through is not allowed","Execution automatically falls through to the next case","The switch expression must always be an int","The default section is mandatory"],0,"Unlike C/C++, C# does not allow implicit fall-through. The selector can be an integer, char, string or enum, and default is optional."],
+[3,"If x = 1, y = 2 and z = 3 initially, what are x, y and z after this code?",`switch (x) {
+    case 0: x++; z = x + 1; break;
+    case 1: y = z + x; break;
+    default: z = z + x; break;
+}`,["x=1, y=4, z=3","x=2, y=2, z=2","x=1, y=2, z=4","x=1, y=3, z=3"],0,"x is 1, so case 1 runs: y = 3 + 1 = 4. x and z are unchanged."],
+[3,"What is the result of compiling the following code?",`int n = 1;
+switch (n) {
+    case 1:
+        Console.WriteLine("One");
+    case 2:
+        Console.WriteLine("Two");
+        break;
+}`,["Prints One","Prints One then Two","Prints Two","Compile-time error"],3,"Case 1 contains a statement but no break, and C# does not allow control to fall through to the next case (error CS8070)."],
+[3,"What is the output of the following code?",`int d = 7;
+switch (d) {
+    case 6:
+    case 7:
+        Console.WriteLine("Weekend");
+        break;
+    default:
+        Console.WriteLine("Weekday");
+        break;
+}`,["Weekday","Weekend","WeekendWeekday","Compile-time error"],1,"Stacked labels (case 6: case 7:) let several values share one body."],
+[3,"What is the output of the following code?",`char g = 'C';
+switch (g) {
+    case 'A': Console.WriteLine("Excellent"); break;
+    case 'B': Console.WriteLine("Very Good"); break;
+    case 'C': Console.WriteLine("Good"); break;
+    default:  Console.WriteLine("Fail"); break;
+}`,["Excellent","Very Good","Good","Fail"],2,"g matches case 'C', so Good is printed."],
+[3,"What is the output of the following code?",`Console.WriteLine(true && false || true);`,["True","False","Compile-time error","Nothing is printed"],0,"&& has higher precedence than ||, so it is (true && false) || true, which is false || true = True."],
+[3,"What is the output of the following code?",`int x = 0;
+if (x != 0 && 10 / x > 1)
+    Console.WriteLine("Yes");
+else
+    Console.WriteLine("Safe");`,["Yes","Safe","DivideByZeroException","Compile-time error"],1,"&& short-circuits: x != 0 is false, so 10 / x is never evaluated."],
+[3,"What is the value of a after the following code runs?",`int a = 5;
+bool r = (a > 3) || (a++ > 0);
+Console.WriteLine(a);`,["5","6","7","Compile-time error"],0,"|| short-circuits: the left operand is true, so a++ is never evaluated and a stays 5."],
+[3,"What is the output of the following code?",`bool a = true, b = false;
+Console.WriteLine((5 > 7) ^ (a == b));`,["True","False","1","Compile-time error"],1,"5 > 7 is false and a == b is false. XOR is true only when the operands differ, so the result is False."],
+[3,"What is the output of the following code?",`for (int i = 0; i <= 5; i++) {
+    if (i == 3) break;
+    Console.Write(i + ",");
+}`,["0,1,2,","0,1,2,3,","0,1,2,4,5,","0,1,2,3,4,5,"],0,"break leaves the loop as soon as i == 3, before that value is printed."],
+[3,"What is the output of the following code?",`for (int i = 0; i < 6; i++) {
+    if (i % 2 == 0) continue;
+    Console.Write(i);
+}`,["024","135","012345","531"],1,"continue skips the rest of the body for even values of i, so only 1, 3 and 5 are printed."],
+[3,"What is the output of the following code when n = 13?",`int n = int.Parse(Console.ReadLine());
+int sum = 0;
+for (int i = 1; i <= n; i += 2) {
+    if (i % 7 == 0) continue;
+    sum += i;
+}
+Console.WriteLine("Sum = " + sum);`,["Sum = 49","Sum = 42","Sum = 36","Sum = 91"],1,"i takes the values 1, 3, 5, 7, 9, 11, 13 and 7 is skipped: 1 + 3 + 5 + 9 + 11 + 13 = 42."],
+[3,"What is the output of the following code?",`int i = 1, s = 0;
+while (i <= 5) {
+    s += i;
+    i++;
+}
+Console.WriteLine(s);`,["10","15","21","5"],1,"1 + 2 + 3 + 4 + 5 = 15."],
+[3,"What is the output of the following code?",`int i = 10;
+do {
+    Console.Write(i);
+    i++;
+} while (i < 5);`,["Nothing is printed","10","10 11 12 13 14","Infinite loop"],1,"A do-while loop tests its condition after the body, so the body always runs at least once."],
+[3,"Which of the following loops is an infinite loop?","",["for (int i = 0; i < 3; i++) { }","while (false) { }","for (;;) { }","do { } while (false);"],2,"for (;;) has no condition, so it never ends unless it is broken out of."],
+[3,"What is the output of the following code?",`for (double d = 0.5; d < 2; d += 0.5)
+    Console.Write(d + " ");`,["0.5 1 1.5 ","0.5 1.0 1.5 2.0 ","0 1 2","Compile-time error"],0,"The control variable of a for loop can be a double. It takes the values 0.5, 1 and 1.5 (the double 1 prints as 1)."],
+[3,"What is the output of the following code?",`for (int i = 0, j = 10; i < j; i += 3, j -= 3)
+    Console.Write(i + ":" + j + " ");`,["0:10 3:7 ","0:10 3:7 6:4 ","0:10 ","0:10 3:7 6:4 9:1 "],0,"Multiple initializers and iterators are separated by commas. After 3:7, i = 6 and j = 4, so i < j is false."],
+[3,"What is the output of the following code?",`for (int i = 3; i > 0; i--)
+    Console.Write(i);`,["123","321","210","3210"],1,"The loop counts down: 3, 2, 1."],
+[3,"What is the output of the following code?",`for (int a = 1; a <= 3; a++) {
+    for (int b = a; b <= 3; b++)
+        Console.Write(b + " ");
+    Console.WriteLine();
+}`,["1 2 3 \n1 2 3 \n1 2 3 ","1 2 3 \n2 3 \n3 ","1 \n1 2 \n1 2 3 ","3 \n2 3 \n1 2 3 "],1,"The inner loop starts at the current value of a, so each row is one number shorter than the previous one."],
+[3,"How many asterisks does the following code print?",`for (int i = 1; i <= 4; i++)
+    for (int j = 1; j <= i; j++)
+        Console.Write("*");`,["4","10","16","6"],1,"1 + 2 + 3 + 4 = 10 asterisks (a right-angled triangle)."],
+[3,"What is the output of the following code?",`for (int i = 1; i <= 3; i++) {
+    for (int j = 1; j <= i; j++)
+        Console.Write(i);
+    Console.WriteLine();
+}`,["1\n22\n333","1\n12\n123","111\n22\n3","123\n123\n123"],0,"The inner loop prints the value of i exactly i times on each line."],
+[3,"What is the output of the following code?",`for (int i = 0; i < 3; i++)
+    for (int j = 0; j < 3; j++) {
+        if (j == 1) break;
+        Console.Write($"{i}{j} ");
+    }`,["00 10 20 ","00 01 02 ","00 ","00 01 10 11 20 21 "],0,"break exits only the inner loop. For every i, only j = 0 is printed."],
+[3,"What does the following code print?",`int f = 1;
+for (int i = 1; i <= 5; i++)
+    f *= i;
+Console.WriteLine(f);`,["15","24","120","720"],2,"5! = 1 × 2 × 3 × 4 × 5 = 120."],
+
+/* ---------- Lec 4 ---------- */
+[4,"Which of the following correctly declares and allocates an array of 5 integers in C#?","",["int a[] = new int[5];","int[] a = new int[5];","int[5] a;","array int a = new array(5);"],1,"In C# the brackets go after the type: int[] a = new int[5];"],
+[4,"An array is a collection of ______ data types stored in contiguous memory locations.","",["Homogeneous","Heterogeneous","Mixed","Random"],0,"All elements of an array share the same type and are stored contiguously, which gives fast access by index."],
+[4,"Which of the following is a disadvantage of arrays?","",["Fast random access","Fixed size (size limit)","Elements stored contiguously","Easy iteration with loops"],1,"The size is fixed when the array is created and cannot grow or shrink; a List<T> is used for dynamic sizes."],
+[4,"What is the output of the following code?",`string[] s = new string[2];
+Console.WriteLine(s[0] == null);`,["True","False","An empty string","Compile-time error"],0,"Elements of a reference-type array default to null (0 for numbers, false for bool)."],
+[4,"What happens when the following code runs?",`int[] a = null;
+Console.WriteLine(a.Length);`,["Prints 0","IndexOutOfRangeException","NullReferenceException","Compile-time error"],2,"The variable holds null because no array was created with new, so using it throws NullReferenceException."],
+[4,"What happens when the following code runs?",`int[] a = { 1, 2, 3 };
+Console.WriteLine(a[3]);`,["Prints 3","Prints 0","IndexOutOfRangeException","Compile-time error"],2,"Valid indexes are 0 to Length - 1 (here 0..2), so a[3] is out of range."],
+[4,"What is the output of the following code?",`int[] a = { 2, 4, 6, 8 };
+Console.WriteLine(a.Length + a[a.Length - 1]);`,["4","8","12","10"],2,"Length is 4 and a[3] is 8, so 4 + 8 = 12."],
+[4,"What is the output of the following code?",`int[] a = { 1, 2, 3, 4 };
+Array.Reverse(a);
+Console.WriteLine(a[0]);`,["1","2","3","4"],3,"Array.Reverse reverses the array in place, giving {4, 3, 2, 1}."],
+[4,"Which method makes a copy of all the elements of the source array and returns an object containing them?","",["Sort()","Clone()","Reverse()","IndexOf()"],1,"Array.Clone() creates a shallow copy; cast the result to the array type: (int[])a.Clone()."],
+[4,"What is the output of the following code?",`int[] a = { 1, 2, 3 };
+int[] b = (int[])a.Clone();
+int[] c = a;
+b[0] = 99;
+c[1] = 77;
+Console.WriteLine(a[0] + " " + a[1]);`,["99 77","1 77","1 2","99 2"],1,"b is an independent copy, so a[0] stays 1. c refers to the same array as a, so a[1] becomes 77."],
+[4,"What is the output of the following code?",`int[] a = { 5, 2, 9, 1 };
+Array.Sort(a);
+Console.WriteLine(a[0] + " " + a[3]);`,["5 1","1 9","9 1","2 5"],1,"Array.Sort orders the elements ascending: {1, 2, 5, 9}."],
+[4,"What is the output of the following code?",`int[] a = { 3, 1, 2 };
+int s = 0;
+foreach (int x in a)
+    s += x * x;
+Console.WriteLine(s);`,["6","14","36","9"],1,"9 + 1 + 4 = 14."],
+[4,"Which statement is correct about the following declaration?",`int[,] a = new int[3, 2];`,["a is a 1-D array of 5 integers","a is a 1-D array of 3 integers","a is a 2-D array with 3 rows and 2 columns","a is a 2-D array with 2 rows and 3 columns"],2,"In new int[rows, cols] the first dimension is the number of rows (3) and the second is the number of columns (2)."],
+[4,"What is the output of the following code?",`int[,] m = new int[4, 5];
+Console.WriteLine(m.GetLength(0) + " " + m.GetLength(1) + " " + m.Length);`,["4 5 9","4 5 20","5 4 20","4 5 4"],1,"GetLength(0) is the number of rows (4), GetLength(1) the number of columns (5) and Length is the total number of elements (20)."],
+[4,"What is the output of the following code?",`int[,] m = { { 1, 2, 3 }, { 4, 5, 6 } };
+Console.WriteLine(m[1, 2]);`,["2","5","6","3"],2,"Row 1 is {4, 5, 6}; column 2 of that row is 6."],
+[4,"What is the output of the following code?",`int[,] m = { { 1, 2 }, { 3, 4 } };
+int s = 0;
+for (int i = 0; i < 2; i++)
+    s += m[i, i];
+Console.WriteLine(s);`,["4","5","6","10"],1,"Main diagonal: m[0,0] + m[1,1] = 1 + 4 = 5."],
+[4,"Each row in a ______ array contains an array of its own, and these arrays can have different lengths.","",["one-dimensional","multi-dimensional (rectangular)","jagged","constant"],2,"A jagged array is an array of arrays (e.g., int[][]), an aggregation of references."],
+[4,"What is the advantage of a jagged array over a 2-D rectangular array?","",["Easy initialization of elements","Rows can have different lengths, so no empty elements are wasted","It compiles faster","It can store elements of different data types"],1,"The rows of a jagged array are separate arrays and may have different sizes."],
+[4,"What happens when the following code runs?",`int[][] a = new int[3][];
+a[0] = new int[] { 1, 2, 3 };
+a[1] = new int[] { 4, 5 };
+Console.WriteLine(a[2].Length);`,["Prints 0","IndexOutOfRangeException","NullReferenceException","Compile-time error"],2,"new int[3][] creates three null rows. a[2] was never allocated, so a[2].Length throws NullReferenceException."],
+[4,"What is the output of the following code?",`int[][] j = {
+    new int[] { 1, 2, 3 },
+    new int[] { 4, 5 },
+    new int[] { 6 }
+};
+Console.WriteLine(j[1].Length + j[2][0]);`,["8","7","5","11"],0,"j[1].Length is 2 and j[2][0] is 6, so the result is 8."],
+[4,"What is the output of the following code?",`int[,] m = new int[2, 2];
+m[0, 1] = 5;
+Console.WriteLine(m[0, 0] + m[0, 1] + m[1, 1]);`,["5","0","15","Compile-time error"],0,"Unassigned int elements default to 0, so the sum is 0 + 5 + 0 = 5."],
+
+/* ---------- Lec 5 ---------- */
+[5,"What is the output of the following code?",`string s = "Hi";
+s.ToUpper();
+Console.WriteLine(s);`,["HI","Hi","hi","Compile-time error"],1,"Strings are immutable: ToUpper() returns a new string and leaves s unchanged. Write s = s.ToUpper() to keep the result."],
+[5,"Which statement about string and StringBuilder is correct?","",["string is mutable and StringBuilder is immutable","Both are immutable","string is immutable and StringBuilder is mutable","Both are mutable"],2,"Modifying a string creates a new object in memory, while a StringBuilder changes its own buffer without creating new instances."],
+[5,"What is the output of the following code?",`StringBuilder x = new StringBuilder("HELLO");
+StringBuilder y = new StringBuilder("HELLO");
+if (x == y)
+    Console.WriteLine("Equal");
+else
+    Console.WriteLine("Unequal");`,["Equal","Unequal","Compile-time error","Run-time error"],1,"== on StringBuilder compares references. x and y are two different objects, so the output is Unequal (compare x.ToString() and y.ToString() to compare content)."],
+[5,"What is the output of the following code?",`var sb = new StringBuilder();
+sb.Append("a").Append(1).Append('b');
+Console.WriteLine(sb);`,["a1b","ab1","a 1 b","Compile-time error"],0,"Append returns the same StringBuilder, so calls can be chained: a, 1, b gives a1b."],
+[5,"When should StringBuilder be preferred over string?","",["When the text never changes","When heavy string manipulation (e.g., many appends in a loop) is required","When storing a single character","When comparing two strings"],1,"Each string concatenation allocates a new object, whereas StringBuilder modifies one buffer and performs better for heavy manipulation."],
+[5,"What is the output of the following code?",`string a = "abc";
+string b = "ab" + "c";
+Console.WriteLine(a == b);`,["True","False","Compile-time error","Run-time error"],0,"For strings, == compares the character values, so the result is True."],
+[5,"What is the output of the following code?",`string s = "Programming";
+Console.WriteLine(s.Substring(3, 4));`,["gram","ogra","ramm","gramm"],0,"Substring(startIndex, length): index 3 is 'g' and 4 characters are taken, giving gram."],
+[5,"A verbatim string literal begins with which character?","",["$","@","#","%"],1,"The @ prefix makes a verbatim string: backslashes are literal and the text may span several lines (a quotation mark is written as two quotation marks)."],
+[5,"Using the same method name several times with different parameter lists is called ____.","",["Overriding","Overloading","Recursion","Encapsulation"],1,"Overloading means the same name with a different number or type of parameters. Overriding redefines an inherited method in a derived class."],
+[5,"What is the result of the following code?",`static void F() {
+    int x = 5;
+}
+static void Main() {
+    F();
+    Console.WriteLine(x);
+}`,["5","0","Run-time error","Compile-time error"],3,"x is a local variable of F(); its scope ends with the method, so Main cannot use it."],
+[5,"Which keyword lets you access a class member without creating an object of that class?","",["public","private","protected","static"],3,"static members belong to the class itself and are accessed as ClassName.Member."],
+[5,"What is the output of the following code?",`static void Main(string[] args) {
+    Mul();
+    m();
+}
+static void Mul() {
+    Console.Write("4");
+}
+static void m() {
+    Console.Write("3");
+    Mul();
+}`,["433","443","434","344"],2,"Mul() prints 4; then m() prints 3 and calls Mul(), which prints 4 again: 434."],
+[5,"What is the output of the following code?",`class Sample {
+    public static void First() { Console.WriteLine("first method"); }
+    public void Second() { First(); Console.WriteLine("second method"); }
+    public void Second(int i) { Console.WriteLine(i); Second(); }
+    static void Main() {
+        Sample obj = new Sample();
+        Sample.First();
+        obj.Second(10);
+    }
+}`,["first method\n10\nfirst method\nsecond method","first method\nfirst method\nsecond method\n10","10\nfirst method\nsecond method","first method\n10\nsecond method"],0,"Sample.First() prints 'first method'. obj.Second(10) prints 10, then calls Second(), which calls First() ('first method') and prints 'second method'."],
+[5,"What does F(4) return?",`static int F(int n) {
+    if (n <= 1) return 1;
+    return n * F(n - 1);
+}`,["10","16","24","120"],2,"F(4) = 4 × 3 × 2 × 1 = 24 (factorial)."],
+[5,"What does S(123) return?",`static int S(int n) {
+    if (n == 0) return 0;
+    return n % 10 + S(n / 10);
+}`,["3","6","123","321"],1,"3 + S(12) = 3 + 2 + S(1) = 3 + 2 + 1 + S(0) = 6 (sum of digits)."],
+[5,"What does Fib(6) return?",`static int Fib(int n) {
+    if (n < 2) return n;
+    return Fib(n - 1) + Fib(n - 2);
+}`,["5","8","13","6"],1,"The sequence 0, 1, 1, 2, 3, 5, 8 gives Fib(6) = 8."],
+[5,"What happens if a recursive method has no base case?","",["It returns 0","It runs only once","Infinite recursion ends in a stack overflow","Compile-time error"],2,"Every call adds a frame to the call stack. Without a base case the stack is exhausted and the program crashes with a stack overflow."],
+[5,"Which access modifier hides members from all other classes, so that only the same class can access them?","",["public","protected","internal","private"],3,"private members are accessible only inside the declaring class (the default for class members)."],
+[5,"Which access modifier allows a child (derived) class to access members of its base class while hiding them from unrelated classes?","",["protected","internal","private","public"],0,"protected makes a member visible to the declaring class and to classes derived from it, which is how it supports inheritance."],
+[5,"What are the default accessibility of a top-level class and of its members?","",["internal / private","public / private","private / internal","public / public"],0,"A top-level class without a modifier is internal; members without a modifier are private."],
+[5,"An internal member can be accessed from ____.","",["any assembly","the current assembly only","derived classes only","the same class only"],1,"internal limits access to the current assembly (the application in which the member is defined)."],
+[5,"A protected internal member is accessible from ____.","",["the same class only","derived classes in other assemblies only","any class in the current assembly or any derived class (even in another assembly)","any code anywhere"],2,"protected internal means protected OR internal: the current assembly or derived types."],
+[5,"What is the result of compiling and running the following code?",`class Box {
+    int x = 10;
+    int y = 20;
+    int z = 30;
+}
+class Program {
+    static void Main(string[] args) {
+        Box b = new Box();
+        Console.WriteLine($"{b.x}, {b.y}, {b.z}");
+    }
+}`,["10, 20, 30","0, 0, 0","Compile-time error","Run-time error"],2,"Members declared without a modifier are private, so Program cannot access b.x, b.y or b.z."],
+[5,"What is the output of the following code? (values are printed one per line; listed here in print order)",`static void Main(string[] args) {
+    int n = 1;
+    Method(n);
+    Console.WriteLine(n);
+    Method1(ref n);
+    Console.WriteLine(n);
+}
+static void Method(int num) {
+    num += 20;
+    Console.WriteLine(num);
+}
+static void Method1(ref int num) {
+    num += 20;
+    Console.WriteLine(num);
+}`,["1 21 21 21","21 1 21 21","11 21 21 11","1 1 1 1"],1,"Method receives a copy: it prints 21 and n stays 1. Method1 uses ref: it prints 21 and n becomes 21, so the output is 21, 1, 21, 21."],
+[5,"What is the output of the following code?",`static void Main() {
+    int x = 6, s = 0, c = 0;
+    Mul(x, ref s, ref c);
+    Console.WriteLine(x + " " + s + " " + c);
+}
+static void Mul(int x, ref int s, ref int c) {
+    x -= 10;
+    s = x * x;
+    c = x * x * x / 2;
+}`,["6 16 -32","-4 16 -32","6 0 0","-4 0 0"],0,"x is passed by value, so the caller's x stays 6. s and c are passed by ref: s = (-4)² = 16 and c = (-64) / 2 = -32."],
+[5,"What happens when the following code is compiled?",`static void Main() {
+    int s;
+    Inc(ref s);
+}
+static void Inc(ref int v) { v++; }`,["s becomes 1","s becomes 0","Compile-time error","Run-time error"],2,"A variable passed with ref must be initialized before the call. An out argument does not have to be."],
+[5,"What is the output of the following code?",`static void Main(string[] args) {
+    int num;
+    Fun1(out num);
+    Console.WriteLine("after calling: " + num);
+}
+static void Fun1(out int num) {
+    num = 3;
+    Console.WriteLine("inside method: " + num);
+    num = num * num / ++num;
+}`,["inside method: 3\nafter calling: 2","inside method: 3\nafter calling: 3","inside method: 3\nafter calling: 9","inside method: 3\nafter calling: 4"],0,"num * num is 9 and ++num is 4, so num = 9 / 4 = 2 (integer division)."],
+[5,"Which parameter modifier is typically used when a method must return multiple values?","",["out","params","const","static"],0,"out parameters let a method assign several results to the caller's variables; the caller does not need to initialize them first."],
+[5,"What is the output of the following code?",`static int Sub(int a, int b) { return a - b; }
+static void Main() {
+    Console.WriteLine(Sub(b: 2, a: 10));
+}`,["-8","8","12","Compile-time error"],1,"Named arguments are matched by name, not by position: a = 10 and b = 2, so the result is 8."],
+[5,"Which method declaration is valid?","",["void F(int a = 1, int b)","void F(int a, int b = 2)","void F(int a = 1, int b = )","void F(optional int a)"],1,"Optional parameters (those with default values) must be defined at the end of the parameter list."],
+[5,"What is the output of the following code?",`static int Sum(params int[] n) {
+    int s = 0;
+    foreach (int x in n) s += x;
+    return s;
+}
+static void Main() {
+    Console.WriteLine(Sum() + Sum(1, 2, 3));
+}`,["6","0","Compile-time error","Run-time error"],0,"With params any number of arguments may be passed. Sum() receives an empty array and returns 0, and Sum(1, 2, 3) returns 6."],
+[5,"What is the output of the following code?",`static void Change(int[] p) {
+    p[0] = 888;
+    p = new int[5];
+    p[0] = 777;
+}
+static void Main() {
+    int[] arr = { 1, 2, 3 };
+    Change(arr);
+    Console.WriteLine(arr[0] + " " + arr.Length);
+}`,["888 3","777 5","1 3","888 5"],0,"The reference is passed by value: changing an element affects the original array, but re-pointing p to a new array does not."],
+[5,"What is the output of the following code?",`static void Change(ref int[] p) {
+    p[0] = 888;
+    p = new int[5];
+    p[0] = 777;
+}
+static void Main() {
+    int[] arr = { 1, 2, 3 };
+    Change(ref arr);
+    Console.WriteLine(arr[0] + " " + arr.Length);
+}`,["888 3","777 5","1 3","888 5"],1,"With ref the method can re-point the caller's variable, so arr now refers to the new 5-element array whose first element is 777."],
+[5,"What is the output of the following code?",`static void Swap(ref string a, ref string b) {
+    string t = a; a = b; b = t;
+}
+static void Main() {
+    string x = "A", y = "B";
+    Swap(ref x, ref y);
+    Console.WriteLine(x + y);
+}`,["AB","BA","A","Compile-time error"],1,"Passing the references by ref lets Swap exchange the caller's variables, so x = B and y = A."],
+[5,"What is the output of the following code?",`static void Fun(int[] b) {
+    for (int i = 0; i < b.Length; i++)
+        b[i] *= 5;
+}
+static void Main() {
+    int[] a = { 1, 2, 3 };
+    Fun(a);
+    Console.WriteLine(string.Join(",", a));
+}`,["1,2,3","5,10,15","5,25,125","Compile-time error"],1,"Arrays are reference types: the method receives a reference to the same array, so the caller sees the changes."]
+];
+
+const TOPICS=['All Topics','Syntax, input-output, variables types','Type conversion (casting), boxing - unboxing, if else','switch case, logical operators, loops, nested loops','Arrays, Multi dimensional arrays, Jagged Arrays','Strings-String builder, Methods, Recursion, access modifier'];
+const mk=s=>r=>({t:r[0],q:r[1],c:r[2],o:r[3],a:r[4],e:r[5],s});
+const Q=RAW.map(mk(0));
+
+/* ---------- helpers ---------- */
+const $=s=>document.querySelector(s),app=$('#app'),L='ABCD';
+const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const fmt=s=>String(s/60|0).padStart(2,'0')+':'+String(s%60).padStart(2,'0');
+const shuf=a=>{a=[...a];for(let i=a.length-1;i>0;i--){const j=Math.random()*(i+1)|0;[a[i],a[j]]=[a[j],a[i]]}return a};
+const RX=/(\/\/.*)|([$@]*"(?:[^"\\\n]|\\.)*")|('(?:[^'\\]|\\.)')|\b(abstract|bool|break|byte|case|catch|char|class|const|continue|decimal|default|do|double|else|false|float|for|foreach|if|in|int|internal|long|new|null|object|out|params|private|protected|public|ref|return|short|static|string|switch|true|try|ushort|var|void|while)\b|\b(\d+(?:\.\d+)?[fdm]?)\b/g;
+function hl(c){let o='',l=0,m;RX.lastIndex=0;while((m=RX.exec(c))){o+=esc(c.slice(l,m.index));const k=m[1]?'c':(m[2]||m[3])?'s':m[4]?'k':'n';o+=`<span class="t-${k}">${esc(m[0])}</span>`;l=RX.lastIndex}return o+esc(c.slice(l))}
+const code=c=>c?`<pre class="code mt-4"><code>${hl(c)}</code></pre>`:'';
+const best=()=>{try{return JSON.parse(localStorage.getItem('csq-best')||'{}')}catch(e){return{}}};
+const saveBest=(k,p)=>{try{const b=best();if(!(b[k]>=p)){b[k]=p;localStorage.setItem('csq-best',JSON.stringify(b))}}catch(e){}};
+const pool=k=>Q.filter(q=>!k||q.t===k);
+const CH='rounded-full bg-white/10 px-3 py-1';
+
+/* ---------- state ---------- */
+const S={view:'intro',topic:0,shuffle:true,qs:[],i:0,ans:[],t0:0,el:0,tm:null};
+const score=()=>S.ans.reduce((s,a,k)=>s+(a===S.qs[k].a?1:0),0);
+const answered=()=>S.ans.filter(a=>a!==null).length;
+
+function begin(list){
+  S.qs=list.map(q=>{const ord=shuf(q.o.map((_,k)=>k)).slice();const o=S.shuffle?ord:q.o.map((_,k)=>k);return{...q,o:o.map(k=>q.o[k]),a:o.indexOf(q.a)}});
+  S.i=0;S.ans=Array(S.qs.length).fill(null);S.view='quiz';S.t0=Date.now();
+  clearInterval(S.tm);S.tm=setInterval(()=>{const e=$('#tm');if(e)e.textContent=fmt((Date.now()-S.t0)/1000|0)},1000);
+  render();
+}
+function startNew(){
+  let l=pool(S.topic);if(S.shuffle)l=shuf(l);
+  begin(l);
+}
+function finish(){
+  const u=S.ans.length-answered();
+  if(u&&!confirm(u+' question(s) unanswered. Finish anyway?'))return;
+  clearInterval(S.tm);S.el=(Date.now()-S.t0)/1000|0;S.view='result';
+  if(S.qs.length>=5)saveBest(S.topic,Math.round(score()/S.qs.length*100));
+  render();scrollTo({top:0,behavior:'smooth'});
+}
+function setTopic(k){
+  const inQuiz=S.view==='quiz';
+  if(inQuiz&&answered()&&!confirm('Switch topic? Your current progress will be lost.'))return;
+  S.topic=k;clearInterval(S.tm);
+  if(inQuiz)startNew();else{S.view='intro';render()}
+}
+function pick(k){
+  if(S.view!=='quiz'||k>=S.qs[S.i].o.length||S.ans[S.i]!==null)return;
+  S.ans[S.i]=k;render();const n=$('[data-act=next]');if(n)n.focus({preventScroll:true});
+}
+function go(d){S.i+=d;render();app.scrollIntoView({behavior:'smooth',block:'start'})}
+
+/* ---------- views ---------- */
+function tabs(){
+  return `<div role="tablist" class="flex snap-x gap-2 overflow-x-auto pb-2 lg:grid lg:grid-cols-6 lg:overflow-visible">${TOPICS.map((t,k)=>{
+    const on=S.topic===k;
+    return `<button role="tab" aria-selected="${on}" data-act="tab" data-v="${k}" title="${esc(t)}" class="glass w-44 shrink-0 snap-start rounded-xl p-3 text-left transition hover:bg-white/10 lg:w-auto ${on?'tab-on':''}">
+      <span class="flex items-center justify-between text-xs font-semibold ${on?'text-indigo-200':'text-slate-400'}"><span>${k?'Lec '+k:'All Topics'}</span><span class="rounded-full bg-white/10 px-2 py-0.5">${pool(k).length}</span></span>
+      <span class="mt-1 block break-words text-[13px] leading-snug text-slate-200">${k?esc(t):'Lectures 1 – 5 combined'}</span></button>`}).join('')}</div>`;
+}
+
+function intro(){
+  const k=S.topic,p=pool(k).length,b=best()[k];
+  return `<section class="glass rounded-2xl p-5 sm:p-8">
+    <h2 class="text-xl font-bold sm:text-2xl">${k?`Lec ${k}: ${esc(TOPICS[k])}`:'All Topics'}</h2>
+    <p class="mt-1 text-sm text-slate-400">${p} questions available${b!=null?` · Best score: <b class="text-indigo-300">${b}%</b>`:''}</p>
+    <div class="mt-6">
+      <label class="flex items-center gap-3 rounded-xl border border-white/10 bg-white/5 px-4 py-3 text-sm sm:inline-flex"><input type="checkbox" data-set="shuffle" ${S.shuffle?'checked':''} class="size-4 accent-[#6366f1]"> <span lang="ar" dir="rtl">خلط ترتيب الأسئلة والإجابات</span></label>
+    </div>
+    <button class="btn btn-p mt-6 w-full sm:w-auto" data-act="start">Start quiz →</button>
+    <ul class="mt-6 grid gap-2 text-sm text-slate-400 sm:grid-cols-3"><li>✓ Instant feedback + explanation</li><li>✓ Live score, progress bar &amp; timer</li><li>✓ Topic breakdown at the end</li></ul>
+  </section>`;
+}
+
+function quiz(){
+  const q=S.qs[S.i],a=S.ans[S.i],n=S.qs.length,done=a!==null,ok=a===q.a,ans=answered();
+  return `<section class="glass rounded-2xl p-4 sm:p-7">
+    <div class="flex flex-wrap items-center gap-2 text-sm">
+      <span title="${esc(TOPICS[q.t])}" class="rounded-full bg-[#6366f1]/20 px-3 py-1 font-semibold text-indigo-200 ring-1 ring-[#6366f1]/50">Lec ${q.t} · ${esc(TOPICS[q.t].split(',')[0])}</span>
+      <span class="text-slate-400">Question <b class="text-slate-100">${S.i+1}</b> / ${n}</span>
+      <span class="ml-auto flex items-center gap-2"><span class="${CH}">Score <b class="text-emerald-300">${score()}</b>/${ans}</span><span class="${CH}">⏱ <b id="tm">${fmt((Date.now()-S.t0)/1000|0)}</b></span></span>
+    </div>
+    <div class="mt-4 h-2 w-full overflow-hidden rounded-full bg-white/10" role="progressbar" aria-label="Progress" aria-valuemin="0" aria-valuemax="${n}" aria-valuenow="${ans}"><div class="h-full rounded-full bg-gradient-to-r from-[#6366f1] to-violet-400 transition-all duration-300" style="width:${ans/n*100}%"></div></div>
+    <h2 class="mt-5 text-lg font-semibold leading-snug sm:text-xl">${esc(q.q)}</h2>
+    ${code(q.c)}
+    <div class="mt-5 grid gap-3">${q.o.map((o,k)=>{
+      const c='opt'+(done?(k===q.a?' opt-ok':k===a?' opt-bad':' opt-dim'):'');
+      return `<button class="${c}" data-act="pick" data-v="${k}" ${done?'disabled':''}><span class="k">${L[k]}</span><span class="min-w-0 flex-1 whitespace-pre-line break-words">${esc(o)}</span><span aria-hidden="true">${done&&k===q.a?'✓':done&&k===a?'✗':''}</span></button>`}).join('')}</div>
+    ${done?`<div class="mt-5 rounded-xl border p-4 ${ok?'border-emerald-400/40 bg-emerald-500/10':'border-rose-400/40 bg-rose-500/10'}" role="status">
+      <p class="font-semibold ${ok?'text-emerald-300':'text-rose-300'}">${ok?'✓ Correct!':'✗ Incorrect — the correct answer is '+L[q.a]}</p>
+      <p class="mt-1 text-sm leading-relaxed text-slate-200">${esc(q.e||('Correct answer: '+L[q.a]+'. '+q.o[q.a]))}</p></div>`:''}
+    <div class="mt-6 flex items-center justify-between gap-3">
+      <button class="btn" data-act="prev" ${S.i?'':'disabled'}>← Previous</button>
+      <button class="btn" data-act="finish">Finish</button>
+      <button class="btn btn-p" data-act="next">${S.i<n-1?'Next →':'See results'}</button>
+    </div>
+    <p class="mt-4 hidden text-center text-xs text-slate-500 sm:block">Tip: press 1–4 (or A–D) to answer, ← → to navigate</p>
+  </section>`;
+}
+
+function result(){
+  const n=S.qs.length,c=score(),sk=S.ans.filter(a=>a===null).length,w=n-c-sk,p=Math.round(c/n*100);
+  const by={};S.qs.forEach((q,k)=>{const o=by[q.t]||(by[q.t]={n:0,c:0});o.n++;o.c+=S.ans[k]===q.a?1:0});
+  const msg=p>=90?'Outstanding! 🏆':p>=75?'Great job! 🎉':p>=50?'Good — keep practising.':'Keep going — review the explanations below.';
+  const stat=(v,l,cl)=>`<div class="rounded-xl bg-white/5 p-3 text-center"><div class="text-2xl font-bold ${cl}">${v}</div><div class="text-xs text-slate-400">${l}</div></div>`;
+  return `<section class="glass rounded-2xl p-5 sm:p-8">
+    <div class="flex flex-col items-center gap-6 sm:flex-row">
+      <div class="grid size-36 shrink-0 place-items-center rounded-full" style="background:conic-gradient(#6366f1 ${p}%,rgba(255,255,255,.1) 0);box-shadow:0 0 30px rgba(99,102,241,.35)"><div class="grid size-28 place-items-center rounded-full bg-[#0f172a] text-3xl font-bold">${p}%</div></div>
+      <div class="w-full flex-1"><h2 class="text-xl font-bold sm:text-2xl">${msg}</h2><p class="text-sm text-slate-400">${c} of ${n} correct · ${TOPICS[S.topic]}</p>
+        <div class="mt-4 grid grid-cols-2 gap-3 sm:grid-cols-4">${stat(c,'Correct','text-emerald-300')}${stat(w,'Wrong','text-rose-300')}${stat(sk,'Skipped','text-amber-300')}${stat(fmt(S.el),'Time','text-indigo-300')}</div></div>
+    </div>
+    <div class="mt-6 flex flex-wrap gap-3"><button class="btn btn-p" data-act="again">↻ Retry this set</button>${w+sk?'<button class="btn" data-act="missed">Retry missed only</button>':''}<button class="btn" data-act="home">New quiz</button></div>
+  </section>
+  <section class="glass mt-5 rounded-2xl p-5 sm:p-8"><h3 class="text-lg font-semibold">Topic breakdown</h3><div class="mt-4 space-y-4">${Object.keys(by).map(t=>{const o=by[t],pc=Math.round(o.c/o.n*100);return `<div><div class="flex justify-between gap-3 text-sm"><span class="text-slate-200"><b>Lec ${t}</b> · ${esc(TOPICS[t])}</span><span class="shrink-0 text-slate-400">${o.c}/${o.n} · ${pc}%</span></div><div class="mt-1.5 h-2.5 overflow-hidden rounded-full bg-white/10"><div class="h-full rounded-full ${pc>=75?'bg-emerald-400':pc>=50?'bg-amber-400':'bg-rose-400'}" style="width:${pc}%"></div></div></div>`}).join('')}</div></section>
+  <section class="glass mt-5 rounded-2xl p-5 sm:p-8"><h3 class="text-lg font-semibold">Review answers</h3><div class="mt-4 space-y-2">${S.qs.map((q,k)=>{const a=S.ans[k],ok=a===q.a;return `<details class="rounded-xl border border-white/10 bg-white/5 p-3"><summary class="cursor-pointer text-sm"><span class="${ok?'text-emerald-300':a===null?'text-amber-300':'text-rose-300'}">${ok?'✓':a===null?'–':'✗'}</span> <span class="text-slate-400">Q${k+1} · Lec ${q.t}</span> — ${esc(q.q)}</summary><div class="mt-3 space-y-2 text-sm">${code(q.c)}<p><span class="text-slate-400">Your answer:</span> <span class="whitespace-pre-line ${ok?'text-emerald-300':'text-rose-300'}">${a===null?'(skipped)':L[a]+'. '+esc(q.o[a])}</span></p><p><span class="text-slate-400">Correct answer:</span> <span class="whitespace-pre-line text-emerald-300">${L[q.a]}. ${esc(q.o[q.a])}</span></p><p class="text-slate-300">${esc(q.e||'')}</p></div></details>`}).join('')}</div></section>`;
+}
+
+function render(){
+  $('#tabs').innerHTML=tabs();
+  app.innerHTML=S.view==='intro'?intro():S.view==='quiz'?quiz():result();
+}
+
+/* ---------- events ---------- */
+document.addEventListener('click',e=>{
+  const b=e.target.closest('[data-act]');if(!b||b.disabled)return;const v=+b.dataset.v;
+  ({tab:()=>setTopic(v),pick:()=>pick(v),prev:()=>go(-1),next:()=>S.i<S.qs.length-1?go(1):finish(),finish,start:startNew,
+    again:()=>begin(S.qs),missed:()=>begin(S.qs.filter((q,k)=>S.ans[k]!==q.a)),home:()=>{S.view='intro';render();scrollTo({top:0,behavior:'smooth'})}})[b.dataset.act]();
+});
+document.addEventListener('change',e=>{const s=e.target.dataset.set;if(!s)return;S[s]=s==='shuffle'?e.target.checked:e.target.value;});
+document.addEventListener('keydown',e=>{
+  if(S.view!=='quiz'||/SELECT|INPUT|TEXTAREA/.test(e.target.tagName)||e.ctrlKey||e.metaKey||e.altKey)return;
+  const k=e.key.length===1?'1234abcd'.indexOf(e.key.toLowerCase()):-1;
+  if(k>-1)pick(k%4);
+  else if(e.key==='ArrowRight'&&S.i<S.qs.length-1)go(1);
+  else if(e.key==='ArrowLeft'&&S.i>0)go(-1);
+});
+render();
+</script>
+<script>
+(function(){var w=document.getElementById('welcome'),b=document.getElementById('welcome-ok');
+function c(){w.style.display='none';document.removeEventListener('keydown',k,true)}
+function k(e){if(e.key==='Escape'||e.key==='Enter'){e.stopPropagation();e.preventDefault();c()}}
+b.addEventListener('click',c);w.addEventListener('click',function(e){if(e.target===w)c()});
+document.addEventListener('keydown',k,true);b.focus();})();
+</script>
+</body>
+</html>
