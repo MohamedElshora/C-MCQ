@@ -482,112 +482,19 @@ static void Main() {
 /* ---------- Mid Term ---------- */
 /* Midterm Exam 1 (15/12/2020) - CSE 3115 */
 [6,"Object is a ______ data type.","",["Non-Primitive","Numeric","Primitive","Integral"],0,"object is a reference type, so it is a non-primitive data type. int, double, char and similar types are primitive value types."],
-[6,"______ consists of the executable code and runtime environment that allows use of various high-level languages on different computer platforms and architectures.","",["CLI","MSIL","CLR","None of them"],2,"The Common Language Runtime (CLR) is the runtime environment that executes managed code and provides services such as memory management."],
+[6,"______ consists of the executable code and runtime environment that allows use of various high-level languages on different computer platforms and architectures.","",["CLI","MSIL","CLR","None of them"],0,"The Common Language Infrastructure (CLI) is the specification that describes executable code and a runtime environment allowing different high-level languages to run on different platforms and architectures. The CLR is Microsoft's implementation of it."],
 [6,"Type conversion (parsing) for a null value produces ______.","",["null","0","null exception","empty (Space)"],2,"int.Parse(null) throws an exception (ArgumentNullException). By contrast, Convert.ToInt32(null) returns 0."],
-[6,"What is the output of the following code?",`byte a = 3; byte b = 5;
-Console.WriteLine(a | b);
-Console.WriteLine(a & b);
-Console.WriteLine(a ^ b);
-Console.WriteLine(~a & b);
-Console.WriteLine(a << 1);
-Console.WriteLine(a << 2);
-Console.WriteLine(a >> 1);`,["7\n1\n6\n5\n6\n12\n1","1\n7\n6\n4\n6\n12\n1","7\n1\n6\n4\n6\n12\n1","7\n1\n6\n4\n6\n12\n2"],2,"3 | 5 = 7, 3 & 5 = 1, 3 ^ 5 = 6, ~3 & 5 = (...11111100) & 00000101 = 4, 3 << 1 = 6, 3 << 2 = 12, 3 >> 1 = 1."],
-[6,"What is the output of the following code?",`for (int a = 1; a <= 5; a++) {
-  for (int b = a; b <= 5; b++) {
-    Console.Write(b + " ");
-  }
-  Console.WriteLine();
-}`,["1 2 3 4 5\n1 2 3 4 5\n1 2 3 4 5\n1 2 3 4 5\n1 2 3 4 5","1 2 3 4 5\n2 3 4 5\n3 4 5\n4 5\n5","1\n1 2\n1 2 3\n1 2 3 4\n1 2 3 4 5","1 2 3 4 5\n1 2 3 4\n1 2 3\n1 2\n1"],1,"The inner loop starts at the current value of a, so every row is one number shorter than the previous one."],
-[6,"What is the output of the following code?",`static void Main(string[] args) {
-  int[] arr = new int[] {1,2,3,4,5};
-  func1(ref arr);
-  for (int i = 0; i < arr.Length; i++) {
-    Console.WriteLine($"arr [{i+1}] = {arr[i]}");
-  }
-}
-static void func1(ref int[] array) {
-  for (int i = 0; i < array.Length; i += 2) {
-    array[i] += 10;
-  }
-}`,["arr [1] = 1\narr [2] = 2\narr [3] = 3\narr [4] = 4\narr [5] = 5","arr [1] = 11\narr [2] = 12\narr [3] = 13\narr [4] = 14\narr [5] = 15","arr [1] = 11\narr [2] = 2\narr [3] = 13\narr [4] = 4\narr [5] = 15","Compile-time error"],2,"The loop steps by 2, so only indexes 0, 2 and 4 get +10: 11, 2, 13, 4, 15."],
 /* Midterm Exam 2 (22/12/2020) - CSE 3115 */
 [6,"Struct is a ______ data type.","",["Non-Primitive","Numeric","Primitive","Integral"],2,"In this course struct is treated as a value type (primitive-like), unlike classes and object, which are reference (non-primitive) types."],
 [6,"The program consists of ______.","",["Input","Output","Process","Input, output and process together"],3,"A program takes input, processes it and produces output, so all three are parts of a program."],
 [6,"Implicit conversion follows the order of conversion as compatibility of data type as:","",["short < double < long","short < long < double","long < short < double","double < long < short"],1,"Implicit (widening) conversion goes from smaller to larger types: short -> long -> double."],
 [6,"Type conversion (Convert.To...) for a null value produces ______.","",["null","0","null exception","empty (Space)"],1,"The Convert methods return 0 for null (unlike int.Parse(null), which throws an exception)."],
 [6,"You can specify the value of a parameter according to its name, not its order in the method, using ______.","",["out parameters","named parameters","default parameters","dynamic parameters"],1,"Named arguments are matched by name, e.g. Sub(b: 2, a: 10)."],
-[6,"What is the output of the following code?",`bool a = true; bool b = false;
-Console.WriteLine(a && b);
-Console.WriteLine(a || b);
-Console.WriteLine(!b);
-Console.WriteLine(b || true);
-Console.WriteLine((5 > 7) ^ (a == b));`,["False\nTrue\nTrue\nTrue\nTrue","True\nTrue\nFalse\nTrue\nFalse","False\nTrue\nTrue\nTrue\nFalse","False\nTrue\nFalse\nFalse\nTrue"],2,"a && b = False; a || b = True; !b = True; b || true = True; (5 > 7) is False and (a == b) is False, and XOR of two equal values is False."],
 /* Midterm Exam 3 (20/11/2022) - CSE 141 */
 [6,"Which of the following statements is correct about functions?","",["It is necessary for the function to return a value in any case","Redefining a method parameter in the method's body causes an exception","Omitting the return type in method definition results into exception","C# allows a function to have arguments with default values"],3,"C# supports optional parameters (arguments with default values). A void method needs no return value, and the other two statements are not true."],
 [6,"A verbatim string literal (@\"...\") is better used for?","",["Convenience and better readability of strings when the string text consists of backslash characters","Used to initialize multi-line strings","To embed a quotation mark by using double quotation marks inside a verbatim string","All three: readable backslashes, multi-line strings and embedded quotation marks"],3,"A verbatim string keeps backslashes literal, can span several lines, and a quotation mark is written as two quotation marks, so all three uses apply."],
 [6,"______ parameters help to exclude arguments for some parameters; it is not necessary to pass all the parameters in the method.","",["named","optional","params","out"],1,"Optional parameters have default values, so the caller may leave their arguments out."],
 [6,"We can get the number of the columns of a two-dimensional array x by using ______.","",["x.Length()","x.GetLength(0)","x.GetLength(1)","x.GetLength(2)"],2,"GetLength(0) is the number of rows and GetLength(1) is the number of columns."],
-[6,"What will be the output of the following code?",`static void fun(params int[] b) {
-  for (int i = 0; i < b.Length; i++) {
-    b[i] = b[i] * 5;
-    Console.Write(b[i] + ",");
-  }
-}
-static void Main(string[] args) {
-  int[] a = { 1, 2, 3, 4, 5 };
-  fun(a);
-}`,["1, 2, 3, 4, 5","5, 10, 15, 20, 25","5, 25, 125, 625, 3125","6, 12, 18, 24, 30"],1,"Each element is multiplied by 5 and printed: 5, 10, 15, 20, 25."],
-[6,"What is the output of the following code?",`int[][] a = new int[3][];
-a[0] = new int[3] { 1,2,3 };
-a[1] = new int[5] { 1,2,3,4,5 };
-for (int i = 0; i < a.GetLength(0); i++)
-  for (int j = 0; j < a[i].GetLength(0); j++) {
-    a[i][j] *= 2;
-    Console.Write(a[i][j] + " ");
-  }
-  Console.WriteLine();`,["2 4 6 2 4 6 8 10","Compile-time error","Runtime error (NullReferenceException)","2 4 6 2 4 6 8 10 0 0 0"],2,"new int[3][] creates three null rows and a[2] is never allocated. The first two rows are doubled and printed, then a[2].GetLength(0) throws a NullReferenceException."],
-[6,"What is the output of the following code?",`int[] x = {1, 2, 3, 4, 5};
-for (int i = 1; i < 6; i++) {
-  x[i] += 2;
-}
-Console.Write(x[2]);`,["3","5","Compile-time error","Runtime error (IndexOutOfRangeException)"],3,"The array has indexes 0 to 4, but the loop reaches i = 5, so x[5] throws an IndexOutOfRangeException before anything is printed."],
-[6,"What is the output of the following code?",`class Program {
-  int fun(out int i) {
-    int s = 1;
-    i = 1;
-    for (int j = 1; j <= i; j++)
-      s = s + j;
-    return s;
-  }
-  static void Main(string[] args) {
-    Program p = new Program();
-    int i = 5;
-    Console.WriteLine(p.fun(out i));
-  }
-}`,["1","2","5","Compile-time error"],1,"Inside fun, i is set to 1, so the loop runs once (j = 1): s = 1 + 1 = 2."],
-[6,"What is the output of the following code?",`int i = 2, j = 4;
-switch (i + j * 2) {
-  case 1:
-  case 2: Console.WriteLine("1 and 2"); break;
-  case 3: Console.WriteLine("3"); break;
-}`,["1 and 2","3","No output","Compile-time error"],2,"i + j * 2 = 10, which matches no case, and there is no default section, so nothing is printed."],
-[6,"What is the output of the following code?",`int x = 0;
-do {
-  x++;
-  if (x == 5) { x++; continue; }
-  Console.WriteLine(x + " ");
-} while (x < 10);`,["1\n2\n3\n4\n5\n6\n7\n8\n9\n10","1\n2\n3\n4\n6\n7\n8\n9\n10","1\n2\n3\n4\n7\n8\n9\n10","1\n2\n3\n4"],2,"When x reaches 5 it is incremented to 6 and continue skips the print, so 5 and 6 never appear. The loop then prints 7, 8, 9 and 10 (one per line)."],
-[6,"What is the output of the following code?",`class math {
-  protected int a, b;
-  public void sum() { a *= 2; b += 2; Console.WriteLine($"a={a}, b={b}"); }
-}
-class Program {
-  static void Main(string[] args) {
-    math t = new math();
-    t.a = 20; t.b = 10;
-    t.sum();
-  }
-}`,["a=40, b=12","a=20, b=10","Compile-time error","Run-time error"],2,"a and b are protected, so Program (which is not derived from math) cannot access t.a or t.b."],
 [6,"True or False: C# is a type safe programming language.","",["True","False"],0,"C# is type safe: the compiler and the CLR enforce type rules (no implicit narrowing, checked casts, no access to unassigned variables)."],
 [6,"True or False: The fixed keyword is used to define a constant.","",["True","False"],1,"The const keyword defines a constant. fixed is used to pin a variable in memory (unsafe code)."],
 [6,"True or False: Type conversion (parsing) returns 0 for null.","",["True","False"],1,"Parsing null throws an exception (int.Parse(null) throws ArgumentNullException). It is Convert.ToInt32(null) that returns 0."],
@@ -595,56 +502,8 @@ class Program {
 [6,"True or False: The garbage collector automatically reclaims memory occupied by unreachable, unused objects.","",["True","False"],0,"The garbage collector (GC) frees the memory of objects that are no longer referenced."],
 [6,"True or False: The optional and params parameters are always defined at the end of the parameter list.","",["True","False"],1,"Both cannot be last at the same time: params must be the final parameter, while optional parameters only have to come after the required ones. When a method has both, the optional ones come before params."],
 /* Question Bank - MCQ & Output (CSE 141) */
-[6,"What will be the output of the following code?",`int a = 90, b = 15, c = 3;
-int x = a - b / 3 + c * 2 - 1;
-Console.WriteLine(x);`,["92","89","90","88"],2,"Multiplication and division first: 90 - 5 + 6 - 1 = 90."],
-[6,"What will be the output of the following code?",`int i;
-for (i = 0; ; )
-{
-  Console.WriteLine("hello");
-}`,["No output","hello","hello printed infinite times","code will give error as expression syntax"],2,"The condition of a for loop may be omitted; with no condition the loop never ends."],
-[6,"What will be the output of the following code?",`int i = 0;
-while (i++ != 0);
-Console.WriteLine(i);`,["-127 to 127","0 to 127","1","Infinite"],2,"The first test is 0 != 0, which is false, but i++ still increments i to 1. The loop ends and 1 is printed."],
-[6,"What will be the output of the following code?",`int x = 8; int b = 16; int c = 64;
-x /= c /= b;
-Console.WriteLine(x + " " + b + " " + c);`,["2 16 4","4 8 16","2 4 8","8 16 64"],0,"Assignment is right-associative: c /= b gives c = 4, then x /= 4 gives x = 2. b stays 16."],
-[6,"Which statement is correct about the following C# code?",`int[,] a = {{5, 4, 3},{9, 2, 6}};`,["a represents a 1-D array of 5 integers","a represents a 1-D array of 3 integers","a represents a 2-D array of 3 rows and 2 columns","a represents a 2-D array of 2 rows and 3 columns"],3,"There are two inner lists of three values each, so the array has 2 rows and 3 columns."],
-[6,"What will be the output of the following code?",`for (int i = 0; i < 5; i++) { Console.WriteLine(i); }`,["0,1,2,3,4,5","0,1,2,3,","0,1,2,3,4","0,1,2,3,4,5,5"],2,"i goes from 0 to 4; the loop stops when i reaches 5."],
-[6,"What will be the output of the following code?",`int i;
-for (i = 0; i < 5; i++) { }
-Console.WriteLine(i);`,["0,1,2,3,4,5","0,1,2,3,4","5","4"],2,"The loop body is empty and i is incremented until the condition fails at i = 5, so 5 is printed."],
-[6,"What will be the output of the following code?",`int i;
-for (i = 0; i < 5; i++) {
-  int j = 0;
-  j += i;
-  Console.WriteLine(j);
-}
-Console.WriteLine(i);`,["0,1,2,3,4,5,6","0,1,2,3,4,5,5","0,1,2,3,4","0,1,2,3,4,5"],3,"j is reset to 0 on every iteration, so it prints 0, 1, 2, 3, 4. After the loop i is 5, which is printed last."],
-[6,"What will be the output of the following code? (every digit is printed on its own line; the options group them per outer iteration)",`for (int i = 2; i >= 0; i--)
-  for (int j = 0; j <= 2; j++)
-    if (i == j) Console.WriteLine("1");
-    else Console.WriteLine("0");`,["110 / 010 / 001","010 / 100 / 001","001 / 010 / 100","100 / 001 / 010"],2,"i = 2 gives 0,0,1; i = 1 gives 0,1,0; i = 0 gives 1,0,0, which is 001 / 010 / 100."],
 [6,"What is the correct syntax for the do while loop?","",["do; { statement; } while (condition);","do(condition) { statement; } while;","do { statement; } while (condition)","do { statement; } while (condition);"],3,"A do-while loop ends with a semicolon after the condition: do { ... } while (condition);"],
-[6,"What will be the output of the following code?",`int i = 0;
-label: Console.WriteLine(i);
-if (i == 0) goto label;`,["0 0 0 0","0 0 0","0 infinite times","0"],2,"i never changes, so the goto jumps back to the label forever."],
-[6,"What will be the output of the following code?",`int i = 9, j = 7;
-switch (i - j + 3) {
-  case 9: 7: j += 6; break;
-  case 5: i -= 4; break;
-}
-Console.WriteLine(i + "\\n" + j);`,["5 7","9 13","Compiler error","9 7"],2,"'case 9: 7:' is not valid C#: every label needs the case keyword (case 9: case 7:), so the code does not compile."],
-[6,"What will be the output of the following code?",`int[,] arr = new int[3, 3];
-for (int i = 0; i < 3; ++i)
-  for (int j = 0; j < 3; ++j) {
-    arr[i, j] = i * 2 + i * 2;
-    Console.WriteLine(arr[i, j]);
-  }`,["0 0 0, 4 4 4, 8 8 8","4 4 4, 8 8 8, 12 12 12","8 8 8, 12 12 12, 16 16 16","0 0 0, 1 1 1, 2 2 2"],0,"The value is i*2 + i*2 = 4i, so row 0 holds 0, row 1 holds 4 and row 2 holds 8."],
 [6,"Which of these operators can be used to concatenate two or more string objects?","",["+","+=","&","||"],0,"The + operator concatenates strings (s1 + s2). & and || are bitwise/logical operators."],
-[6,"What will be the output of the following code?",`int X = 6, Y = 2;
-X *= X / Y;
-Console.WriteLine(X);`,["12","6","18","Compile time error"],2,"X = X * (X / Y) = 6 * 3 = 18."],
 [6,"True or False: A function can return more than one value.","",["True","False"],0,"A method returns one value directly, but it can return several using out/ref parameters or tuples."],
 [6,"True or False: In C#, a function needs to be defined using the static keyword so that it can be called from the Main function.","",["True","False"],0,"Main is static, so it can call other methods directly only if they are static. Instance methods need an object."],
 [6,"True or False: If a function returns no value, the return type must be declared as void.","",["True","False"],0,"void is the return type of methods that return nothing."],
